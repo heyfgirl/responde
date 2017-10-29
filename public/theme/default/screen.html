@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>加入游戏</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta name="browsermode" content="application">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="./css/screen.css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/ThreeCanvas.js"></script>
+    <script type="text/javascript" src="js/Particle3D.js"></script>
+    <script type="text/javascript" src="js/Snow.js"></script>
+    <script src="/lib/vue/vue.js"></script>
+    <script src="js/lodash.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+</head>
+<body  onresize="onresize()">
+<canvas id="test" class="canvas"></canvas>
+<!--背景-->
+<div  id="top-versebg" class="qrcode"><img src="./img/Versebg.png"> </div>
+<div  id="top-plum" class="qrcode"><img src="./img/Plum.png"> </div>
+
+<div id="app" class="absCenter">
+    <!--启动页面-->
+    <div id="loading"></div>
+    <!--等候开始-->
+    <div v-if="sence=== 'waiting'&&index===true" class="absCenter">
+        <div  class="titleimg">
+            <div>
+                <img src="img/waiting.png"/>
+            </div>
+            <div class="centerbox ">
+                <div class="content">
+                    <div  id="qrcode" class="qrcode"></div>
+                    <div class="tips fontsize-15">
+                        <div class="midFont">温馨提示：</div>
+                        <div class="minFont">
+                            1:连接WIFI（`<span>{{wifiname}}</span>`）<br>
+                            2:扫描二维码<br>
+                            3:填写信息加入比赛<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img id="configbtn"  src="img/config.png" onclick="updateState({'index':false})">
+        <img id="managerJump"  src="img/setting.png" onclick="jumpManager()">
+    </div>
+
+    <!--选择模式-->
+    <div v-if="sence=== 'waiting'&&index===false&&mode===''" id="modelSelete" class="absCenter">
+        <img src="img/model_q.png" onclick="updateState({'mode':'Q'})">
+        <img src="img/model_j.png" onclick="updateState({'mode':'J'})">
+    </div>
+
+    <!--题库选择-->
+    <div v-if="sence=='waiting' && index=== false && (mode !=='') && bank==''" id="waitUser" class="commonCenter absCenter">
+        <img class="bgimg" src="img/painting.png">
+        <div class="qtypelist absCenter fontsize-12">
+            <div class="qtype" v-for="bank in banks" :flag="bank.flag"  onclick="updateState({'bank': this.getAttribute('flag')})" >
+                <!-- v-bind="{ flag:bank.flag , 'onclick': ' }"-->
+                <div  class="typeTitle" :flag="bank.flag"  onclick="updateState({'bank': this.getAttribute('flag')})"  >{{bank.name}}<!--<a class="Choice"></a>>--></div>
+            </div>
+        </div>
+
+        <div class="tools">
+            <img src="img/return.png" onclick="updateState({'mode':''})">
+            <!--  <img class="floatRight"  src="/theme/default/img/goto_step.png" onclick="updateState({'bank':''})">-->
+        </div>
+    </div>
+
+    <!--用户界面-->
+    <div v-if="sence=== 'waiting'&&index===false&&(mode==='J'||mode==='Q')&&bank!=''" class="commonCenter absCenter">
+        <div class="waituser">
+            <img class="waitinguserbtn absCenter" src="img/waitinguserbtn.png">
+        </div>
+        <img class="bgimg" src="img/painting.png">
+        <div class="userList absCenter">
+            <div class="user am-circle" v-for="user in allPlayer">
+                <img class="userAvatar am-circle" v-bind:src="user['avatar'] || 'img/userhost.png'">
+                <div class="fontsize-12 username">{{user.name}}</div>
+                <!-- <a class="kickuser am-circle" onclick="">&times;</a>-->
+            </div>
+        </div>
+        <div class="tools">
+            <img src="img/return.png" onclick="updateState({'bank':''})">
+            <img class="floatRight"  src="img/config.png" onclick="updateState({'sence':'comming'})">
+        </div>
+    </div>
+
+    <!--游戏倒计时-->
+    <div id="willbegin" v-if="sence==='comming'" class="commonCenter2 absCenter" >
+        <div  class="titleimg">
+            <div id="cdwillbegindiv">
+                <img id="iconwillbegin" src="img/willbegin.png"/>
+                <!--<img id="cdwillbegin"   src="/theme/default/img/3.png" />-->
+                <div id="cdwillbegin" class="fontsize-17">{{time}}</div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="centerbox2"><img id="dengpinting" src="img/painting.png"></div>
+        </div>
+        <div class="main">
+            <div class="centerbox content fontsize-13">
+                <div class="midFont fontsize-15">游戏即将开始</div>
+                <div v-if="mode==='J'" class="textarea rule_jingda ">
+                    <p>
+                        1、竞答题模式<br>
+                        2、所有人在规定时间做出选择，答对加分答错不扣分，并记录用时<br>
+                        3、所有题目结束时答题得分最高的取胜，得分相同时使用时间短的获胜。<br>
+                    </p>
+                </div>
+                <div v-if="mode==='Q'" class="textarea rule_qiangda ">
+                    <p>
+                        1、抢答题模式<br>
+                        2、所有人在规定时间做出选择，答对加分答错不扣分，并记录用时<br>
+                        3、所有题目结束时答题得分最高的取胜，得分相同时使用时间短的获胜。<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--正在游戏界面-->
+    <div v-if="sence==='gaming'&&pause===false" class="commonCenter absCenter" >
+        <!-- todo  暂停 结束游戏。icon-->
+        <img id="gamingbg"  class="bgimg" src="img/painting.png">
+        <img v-if="curQuest.muilte===true" id="Radio" src="img/Multiselectbtn.png">
+        <img  v-if="curQuest.muilte===false" id="Radio2" src="img/Radiobtn.png">
+        <img v-if="mode==='J'" id="answerbtn" src="img/answerbtn.png">
+        <img v-if="mode==='Q'" id="answerbtn2" src="img/Answerimg.png">
+
+        <div class="main question absCenter">
+            <div class="bialtitle fontsize-13"></div>
+            <div  class="Qtitle fontsize-15" class="midFont">
+                <div v-if="curQuest.image" class="" >
+                    <img id="idiom_img" v-bind:src="curQuest.image">
+                </div>
+                <div  v-else-if="longQuest" class="fontsize-14">
+                    【{{curQindex}}】{{curQuest.title}}
+                </div>
+                <div  v-else="">
+                    【{{curQindex}}】{{curQuest.title}}
+                </div>
+			</div>
+
+           
+
+            <div class="singleLine fontsize-14" v-if="opMaxLength > 10">
+                <div  class="minFont" v-for="(value,key) in curQuest.option"  >
+                    <div v-if="curQuest.answer && curQuest.answer.indexOf(key) != -1 &&timer==='showing'" class="blink  optionItem">{{key}}:{{value}}</div>
+                    <div v-else="" class="optionItem">{{key}}:{{value}}</div>
+                </div>
+
+            </div>
+            <div class="Qanswers" v-else="">
+                <div  class="minFont" v-for="(value,key) in curQuest.option"  >
+                    <div v-if="curQuest.answer && curQuest.answer.indexOf(key) != -1 &&timer==='showing'" class="blink optionItem">{{key}}:{{value}}</div>
+                    <div v-else="" class="optionItem">{{key}}:{{value}}</div>
+                </div>
+
+            </div>
+
+            <div class="singleLine fontsize-14" v-if="opMaxLength > 10">
+            </div>
+
+        </div>
+        <div id="gamingTools" class="tools2">
+            <!--暂停  下一题  倒计时 -->
+            <div  class="floatLeft fontsize-15"  id="cdCount">{{time}}</div>
+            <!--              <img class="floatRight" v-if="pause===true" src="/theme/default/img/suspend.png" onclick="updateState({'pause':false})">-->
+            <img class="floatRight" src="img/suspend.png" onclick="updateState({'pause':true})">
+
+        </div>
+
+    </div>
+
+    <!--游戏暂停界面-->
+    <div v-if="sence==='gaming'&&pause===true" class="commonCenter absCenter" >
+        <img class="pausebtn" src="img/Continue.png" onclick="updateState({'pause':false})">
+        <img class="overcenter" src="img/gameover.png" onclick="updateState({'sence':'gameover'})">
+    </div>
+    <!--游戏结束界面-->
+    <div v-if="sence==='gameover'" class="commonCenter absCenter" >
+        <img class="bgimg" src="img/painting.png">
+        <div class="main2">
+            <div class="qtypelist2 absCenter fontsize-16">
+                <div class="Rankingy" v-for="user in scoreRange">
+                    <img class="userhostdowm" v-bind:src="user['avatar'] || 'img/userhost.png'">
+                    <div>
+                        {{user.name}}:{{user.score}}
+                    </div>
+
+                </div>
+            </div>
+            <img id="Ranking" src="img/Ranking.png">
+            <img id="gameoverbtn" src="img/gameover.png" onclick="updateState({'sence':'waiting'})">
+        </div>
+    </div>
+
+</div>
+
+<div  id="top-lantern" class="qrcode"><img src="./img/lantern.png" ondblclick="updateState({'sence':'waiting'})"> </div>
+<div  id="top-qrcode" class="qrcode" ondblclick="closeWindow()"><img id="logoimg" src="img/logo.png"></div>
+
+<script type="text/javascript">
+    function onresize(){
+        $("body").css("width",document.documentElement.clientWidth).css("height",document.documentElement.clientHeight);
+        var font_size12=document.documentElement.clientWidth*0.0102;
+        $(".fontsize-12").css("font-size",font_size12+"px");
+        var font_size13=document.documentElement.clientWidth*0.0188;
+        $(".fontsize-13").css("font-size",font_size13+"px");
+        var font_size14=document.documentElement.clientWidth*0.0152;
+        $(".fontsize-14").css("font-size",font_size14+"px");
+        var font_size15=document.documentElement.clientWidth*0.0222;
+        $(".fontsize-15").css("font-size",font_size15+"px");
+        var font_size16=document.documentElement.clientWidth*0.0358;
+        $(".fontsize-16").css("font-size",font_size16+"px");
+        var font_size17=document.documentElement.clientWidth*0.0766;
+        $(".fontsize-17").css("font-size",font_size17+"px");
+        var font_size18=document.documentElement.clientWidth*0.0166;
+        $(".fontsize-18").css("font-size",font_size18+"px");
+    }
+
+
+    //二维码
+    function  showQRCode(txt,qwidth,qheight){
+        var width=document.documentElement.clientWidth;
+        $("#top-qrcode").qrcode({
+            text: txt,
+            width:width*0.1,
+            height: width*0.1,
+            correctLevel: 3
+        });
+    }
+
+
+
+
+    var socket = io();
+
+
+    var $user$ = {};//自己的信息
+    var $state$ = {
+        "sence":"loading",//场景  loading(页面加载), waiting（等候开始）, comming（即将开始），gaming（进行中），gameover（排行榜，游戏结束），
+        "pause":false,
+
+        "wifiname":"",
+
+        "index":true,//是否显示首页
+        "mode":"",//游戏模式  竞答，抢答
+        "vied":false, //是否开始抢答
+        "bank":"",//选择的题库
+        "banks":[],//全部题库
+
+
+        //即时
+        "time":"",//倒计时时间（不区分是什么倒计时）
+        "timer":"",//计时器类型
+
+        //用户
+        "info":$user$,//自己的信息
+        "users":[],//用户列表
+
+        //答题
+        "first":"",//第一个抢到的用户id
+        "curQindex":0,////题目序号
+        "curQuest":{}//题目内容
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: $state$,
+        computed: {
+            "allPlayer":function (){
+                return _.orderBy(
+                        this.users.filter(function(_user){
+                            return _user["type"] =="player"? _user : null;
+                        })
+                )
+            },
+            "scoreRange": function () {
+                var _users = this.users;
+                _users = _.orderBy(this.users.filter(function(_user){
+                            return _user["type"] =="player"? _user : null;
+                        }));
+
+                let  _range = _.sortBy(_users , function(u){
+                    return -u["score"];
+                });
+                return _range;
+            },
+            "opMaxLength":function(){
+                if(this.curQuest && this.curQuest["option"]){
+
+                    var _opt = this.curQuest["option"];
+                    var maxlen = 0;
+                    for (v in  _opt){
+                        maxlen = maxlen > _opt[v].length ? maxlen :_opt[v].length
+                    }
+                    return maxlen;
+                }
+            },
+            "longQuest":function(){
+                if(this.curQuest && this.curQuest["title"]) {
+                    return this.curQuest["title"].length > 40;
+                }
+
+            }
+
+
+        },
+        updated:function(){
+            onresize();
+        }
+    });
+
+    function jumpManager(){
+        location.href = "/manager/index.html";
+    }
+    //关闭页面
+    function closeWindow(){
+        this.window.opener = null;
+        window.close();
+    }
+    //服务器关闭，断开连接
+    socket.on("shutdown",function(){
+        socket.close();
+        socket = null;
+        // todo： 页面通知离线
+        location = location;
+    });
+
+    //更新全局状态
+    socket.on("updateState",function(state){
+        for(var key in  state){
+            $state$[key] = state[key];
+        }
+    });
+
+
+    function updateUserInfo(user){
+        if(user && user["sid"] ){
+            for (var i in $state$["users"]){
+                if($state$["users"][i]["sid"] == user["sid"]){
+                    for(var key in user){
+                        $state$["users"][i][key] = user[key];
+                    }
+                    return;
+                }
+            }
+            $state$["users"].push (user) ;
+        }
+    }
+    //更新用户状态
+    socket.on("upUserInfo",updateUserInfo);
+
+    //获取自己的用户信息
+    socket.on("clientInfo",function(user){
+        for(var key in user){
+            $user$[key] = user[key];
+        }
+    });
+
+    //未登录或未授权，需要登录
+    socket.on("noauth",function(data){
+        console.log(JSON.stringify(data,null,4));
+        location = "/";
+    });
+
+    //管理员从其他地方登陆，本客户端被T出
+    socket.on("remove",function(data){
+        console.log(JSON.stringify(data,null,4));
+        location = "/";
+    });
+
+
+    //新加入用户
+    socket.on("join",function(user){
+        console.log("join new user")
+        updateUserInfo(user);
+    });
+
+
+
+
+    function updateState(args){
+        console.log(args);
+        socket.emit("updateState",args)
+    }
+
+
+    //显示wifi名称/二维码
+    function  setWifiQR(){
+        $.get("/api/screen/info",function(data){
+            if(data["code"]==0){
+                console.log( data["wifiName"])
+                $state$["wifiname"] = data["wifiName"];
+                var hostURL = data["hostURL"];
+                showQRCode(hostURL||location.origin+"/");
+            }else{
+                alert("服务器初始化错误,请注意IP变化");
+            }
+        })
+    }
+
+    $(function(){
+        snow('test','./img/ParticleSmoke.png',{'frame':18,'imgscale':0.7});
+        setWifiQR();
+    });
+
+
+
+
+</script>
+
+
+</body>
+</html>

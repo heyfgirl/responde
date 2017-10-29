@@ -1,0 +1,139 @@
+body{
+    background-color:#000044;
+    background:url(../img/mainbg.png) fixed center center no-repeat;
+    margin:0px;
+    overflow:hidden;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    -webkit-user-select:none;
+    user-select:none;
+    width: 100%;
+    bottom: 0;
+}
+
+.mainpage{
+    background-color: #FFF;
+}
+
+.avatarselect{
+    border: 3px solid #666;
+}
+.avatarimg:hover{
+    border: 3px solid #c7c7c7;
+}
+#canvas{
+    display: none;
+}
+
+.word-bg{
+    width:30%;
+    position: fixed;
+    z-index:-1;
+    top:0;
+    right:0;
+}
+.lantern-bg{
+    width:10%;
+    position:fixed;
+    z-index:-1;
+    top:0;
+    right:50px;
+
+}
+.flower-bg{
+    width:50%;
+    position:fixed;
+    z-index:-1;
+    bottom:0;
+    left:0;
+}
+
+
+@media (max-width: 320px) {
+    .avatarimg{
+        width: 50px;
+        height: 50px
+    }
+    .mainpage{
+        margin-top: 30px
+    }
+    .word-bg{
+        width:50%;
+    }
+
+}
+
+@media  (min-width: 321px) and (max-width: 480px) {
+    .avatarimg{
+        width: 60px;
+        height: 60px
+    }
+     .mainpage{
+        margin-top: 60px
+    }
+
+    .word-bg{
+        top:5%;
+        width:50%;
+    }
+
+}
+
+
+@media  (min-width: 481px) and (max-width: 1024px) {
+    .avatarimg{
+        width: 70px;
+        height: 70px
+    }
+     .mainpage{
+        margin-top: 100px
+    }
+    .word-bg{
+        width:45%;
+    }
+}
+
+@media  (min-width: 800px) and (max-width: 1024px) {
+    .flower-bg{
+        width:40%;
+
+    }
+}
+
+@media  (min-width: 1025px) and (max-width: 2048px) {
+    .avatarimg{
+        width: 80px;
+        height: 80px
+    }
+     .mainpage{
+        margin-top: 150px
+    }
+    .word-bg{
+        width:25%;
+    }
+    .flower-bg{
+        width:20%;
+
+    }
+}
+
+
+@media  (min-width: 2048px) {
+    .avatarimg{
+        width: 100px;
+        height: 100px
+    }
+     .mainpage{
+        margin-top: 200px
+    }
+    .word-bg{
+        width:15%;
+    }
+    .flower-bg{
+        width:15%;
+
+    }
+}
+

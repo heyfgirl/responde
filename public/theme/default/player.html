@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>加入游戏</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta name="browsermode" content="application">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="css/player.css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/polyfill.min.js"></script>
+    <script src="/lib/vue/vue.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+</head>
+<body  onresize="onresize()">
+<div  id="top-plum" class="qrcode"><img src="img/iphoneplum.png"> </div>
+<div  id="top-versebg" class="qrcode"><img src="img/Versebg.png"> </div>
+
+
+<div id="app" class="content">
+
+    <div class="playerInfo">
+        <img  class="userAvatar" v-bind:src="info['avatar'] || 'img/userhost.png'">
+        <div class="userinfo maxFont fontsize-8">
+            <div> 昵称: <span id="userName"> {{info.name}}</span></div>
+            <div> 分数: <span id="userScore"> {{info.score}}</span></div>
+        </div>
+    </div>
+
+    <div id="loading" v-if="sence==='loading'" class="absCenter"></div>
+
+    <div id="waiting" v-if="sence==='waiting'"  class="absCenter singleImage">
+        <div class="am-circle">
+            <img src="img/waitting.gif">
+        </div>
+        <span>等待其他玩家<br/>加入</span>
+    </div>
+
+
+    <!--游戏开始倒计时-->
+    <div id="willbegin"  v-if="sence==='comming'"  class=""  >
+        <div class="fontsize-86">
+            <div class="willbegint">等待开始</div>
+            <div class="willbegint2">{{time}}</div>
+        </div>
+    </div>
+
+
+    <!--游戏暂停界面-->
+    <div v-if="sence==='gaming' && (pause==true) " class="commonCenter absCenter" >
+        <img  class="pausebtn" src="img/pausebtn.png">
+    </div>
+
+    <!--游戏界面，包括抢答模式和竞答模式&&pause===false-->
+    <div id="gaming" class="gaming" v-if="(sence==='gaming' ) && (pause==false) " class=" absCenter" >
+            <div class="vieBox" v-if="mode == 'Q'">
+                <div v-if="timer == 'vying'&&(vied == false)" class="" >
+                    {{time}}
+                </div>
+                <div v-if="vied == true ">
+                    <img class="qiangbtn" src="img/qiangbtn.png" onclick="vie()">
+                </div>
+            </div>
+
+            <div class="answer"  v-if="mode == 'J' || (first == info['sid']) "  >
+                <div class="questBox">
+                    <img class="questBg" src="img/painting.png">
+                    <div v-if="curQuest.images" class="questImg" >
+                        <img id="idiom_img" v-bind:src="curQuest.image">
+                    </div>
+                    <div  v-else="" class="QanswerText fontsize-40" >
+                        <div class="QanserTitle">【{{curQindex}}】 {{curQuest.title}}</div>
+
+                        <div class="QanserOption" v-if="opMaxLength > 6 ">
+                            <div  v-for="(value,key) in curQuest.option">
+                                {{key}} ： {{value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="questOption fontsize-70" v-if="curQuest.option">
+                        <div class="optionBox"  v-for="(value,key) in curQuest.option" :flag="key" onclick="Record(this.getAttribute('flag'))" >
+
+                                <img class="optionBg" src="img/painting.png">
+
+                                <img v-if=" record.indexOf(key) != -1" class="optSelected" src="img/selected.png">
+
+                                <img src="img/painting.png"  class="optionOk blink " alt="Pineapple" v-if="curQuest.answer && curQuest.answer.indexOf(key) != -1 &&timer==='showing'"  >
+
+                                <div class="optionText">
+
+                                    <strong> {{key}}</strong><strong v-if="opMaxLength <= 6 "> : {{value}}</strong>
+
+                                </div>
+
+
+                        </div>
+                </div>
+            </div>
+    </div>
+
+
+    <!--结束页面-->
+    <div v-if="sence === 'gameover'">
+        <div class="gameover2 fontsize-75">
+            Game Over
+        </div>
+        <div class="gameover fontsize-70">
+            <p>
+                得分：{{info.score}}<br>
+                正确：{{info.yesrecord}}<br>
+                错误：{{info.norecord}}<br>
+            </p>
+        </div>
+        <div class="ranking"></div>
+    </div>
+    <img class="shutdown" src="img/shoutdown.png" onclick="quite()">
+
+</div>
+
+
+
+    <div  id="top-lantern" class="">
+        <img src="img/lantern.png">
+    </div>
+
+<script type="text/javascript">
+    function onresize(){
+
+
+        $("body").css("width",document.documentElement.clientWidth).css("height",document.documentElement.clientHeight);
+
+
+        var font_size8=$("#app").width()*0.0602;
+        $(".fontsize-8").css("font-size",font_size8+"px");
+        var font_size12=$("#app").width()*0.0088;
+        $(".fontsize-12").css("font-size",font_size12+"px");
+        var font_size14=$("#app").width()*0.0102;
+        $(".fontsize-14").css("font-size",font_size14+"px");
+        var font_size15=$("#app").width()*0.0110;
+        $(".fontsize-15").css("font-size",font_size15+"px");
+        var font_size16=$("#app").width()*0.0117;
+        $(".fontsize-16").css("font-size",font_size16+"px");
+        var font_size18=$("#app").width()*0.0132;
+        $(".fontsize-18").css("font-size",font_size18+"px");
+        var font_size20=$("#app").width()*0.0147;
+        $(".fontsize-20").css("font-size",font_size20+"px");
+        var font_size22=$("#app").width()*0.0161;
+        $(".fontsize-22").css("font-size",font_size22+"px");
+        var font_size24=$("#app").width()*0.0176;
+        $(".fontsize-24").css("font-size",font_size24+"px");
+        var font_size26=$("#app").width()*0.0191;
+        $(".fontsize-26").css("font-size",font_size26+"px");
+        var font_size28=$("#app").width()*0.0205;
+        $(".fontsize-28").css("font-size",font_size28+"px");
+        var font_size30=$("#app").width()*0.0220;
+        $(".fontsize-30").css("font-size",font_size30+"px");
+        var font_size32=$("#app").width()*0.0235;
+        $(".fontsize-32").css("font-size",font_size32+"px");
+        var font_size36=$("#app").width()*0.0264;
+        $(".fontsize-36").css("font-size",font_size36+"px");
+        var font_size40=$("#app").width()*0.0294;
+        $(".fontsize-40").css("font-size",font_size40+"px");
+        var font_size70=$("#app").width()*0.0514;
+        $(".fontsize-70").css("font-size",font_size70+"px");
+        var font_size75=$("#app").width()*0.0814;
+        $(".fontsize-75").css("font-size",font_size75+"px");
+        var font_size86 =$("#app").width()*0.1214;
+        $(".fontsize-86").css("font-size",font_size86+"px");
+
+
+    }
+    //初始化
+    $(function(){
+        onresize();
+    });
+
+
+    var socket = io();
+
+    function quite(){
+        socket.emit("quite");
+        location = "/";
+    }
+
+
+
+
+
+//    var $user$ = {};//自己的信息
+    var $state$ = {
+        "sence":"waiting",//场景  loading(页面加载), waiting（等候开始）, comming（即将开始），gaming（进行中），pause（暂停），gameover（排行榜，游戏结束），
+        "pause":false,
+
+        "index":true,//是否显示首页
+        "mode":"",//游戏模式  竞答，抢答
+        "vied":false, //是否开始抢答
+        "bank":"",//题库
+        "banks":[],//全部题库
+
+        //即时
+        "time":"",//倒计时时间（不区分是什么倒计时）
+        "timer":"",//计时器类型
+
+        //用户
+        "info":{
+            sid:"",
+            avatar:"",
+            name:"",
+            type:"",
+            score:0,
+            "yesrecord":'',
+            "norecord":'',
+            online:false,
+            quit:true
+        },//自己的信息
+        "users":[],//用户列表
+
+        //答题
+        "record":"",
+
+
+        flagetow:'',
+
+        "first":"",//第一个抢到的用户id
+        "curQindex":0,////题目序号
+        "curQuest":{}//题目内容
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: $state$,
+
+        computed: {
+            "opMaxLength":function(){
+                if(this.curQuest && this.curQuest["option"]){
+
+                    var _opt = this.curQuest["option"];
+                    var maxlen = 0;
+                    for (v in  _opt){
+                        maxlen = maxlen > _opt[v].length ? maxlen :_opt[v].length
+                    }
+                    return maxlen;
+                }
+            }
+        },
+
+        updated:function(){
+            onresize();
+        }
+    });
+
+    //服务器关闭，断开连接
+    socket.on("shutdown",function(){
+        socket.close();
+        socket = null;
+        location = location;
+    });
+
+    //更新全局状态
+    socket.on("updateState",function(state){
+        for(var key in  state){
+            $state$[key] = state[key];
+            if(key == "curQuest" ){
+                console.log( state["curQuest"]["answer"]);
+                if( state["curQuest"] && (!state["curQuest"]["answer"] ) ){
+                    $state$["record"] ="";
+                }
+            }
+            //console.log("update State :"+key+"<==>"+state[key])
+
+        }
+    });
+
+    function updateUserInfo(user){
+        if(user && user["sid"] ){
+            if(user["sid"] == $state$["info"]["sid"] ){
+                for(var key in user){
+                    $state$["info"][key] = user[key];
+                }
+            }
+            for (var i in $state$["users"]){
+                if($state$["users"][i]["sid"] == user["sid"]){
+                    for(var key in user){
+//                        console.log("update "+user["sid"] +":::"+key)
+                        $state$["users"][i][key] = user[key];
+                    }
+                    return;
+                }
+            }
+            $state$["users"].push (user) ;
+        }
+
+    }
+
+    //更新用户状态
+    socket.on("upUserInfo",updateUserInfo);
+
+    //获取自己的用户信息
+    socket.on("clientInfo",function(user){
+        for(var key in user){
+            console.log("init self "+key+"===>"+user[key])
+            $state$["info"][key] = user[key];
+        }
+    });
+
+    //未登录或未授权，需要登录
+    socket.on("noauth",function(data){
+        console.log(JSON.stringify(data,null,4));
+        location = "/";
+    });
+
+    //新加入用户
+    socket.on("join",function(user){
+        console.log("join new user")
+        updateUserInfo(user);
+    });
+
+    //抢题目
+    function vie(){
+        if($state$["vied"]){
+            socket.emit("vie")
+        }
+    }
+
+    var solution='';//答案记录
+
+    function Record(opt){
+        if($state$["timer"] == "showing") return;
+        let rec = $state$["record"];
+        console.log((typeof  rec  )+ rec);
+        console.log(rec.indexOf(opt) == -1);
+        if(rec.indexOf(opt) == -1 ){
+            rec += opt;
+        }else{
+            rec= rec.replace(opt,'');
+            console.log("replace")
+        }
+
+        $state$["record"] = rec ;
+        console.log( $state$["record"])
+    }
+    //收答案
+    socket.on("submitAnswer",function(){
+        socket.emit("answer", $state$["record"])
+    });
+
+    //
+    socket.on("outcome",function(data){
+        if(data){
+             var a =data["score"];
+            var b=$state$["info"]["score"];
+            if(a>b){
+                $state$["info"]["yesrecord"]++;
+            }else {
+                $state$["info"]["norecord"]++;
+            }
+            $state$["info"]["score"] = data["score"];
+        }
+        console.log("score=====>>"+data["score"] )
+
+    })
+</script>
+
+</body>
+</html>

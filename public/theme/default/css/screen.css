@@ -1,0 +1,519 @@
+
+body{
+    background-color:#000044;
+    background:url(../img/mainbg.png) fixed center center no-repeat;
+    margin:0px;
+    overflow:hidden;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    -webkit-user-select:none;
+    user-select:none;
+    width: 100%;
+    bottom: 0;
+}
+a{color:#0078ff;
+}
+.qrcode{
+    opacity :0.7;
+}
+/*字大小*/
+/*@media screen and (min-width: 500px) and (max-width: 3000px) {*/
+    /*html {*/
+        /*font-size: 100%;*/
+    /*}*/
+
+    /*body {*/
+        /*font-size: 1rem;*/
+    /*}*/
+
+    /*.fontsize-12 {*/
+        /*font-size: 1.05rem ;*/
+    /*}*/
+
+    /*.fontsize-13 {*/
+        /*font-size: 1.8rem;*/
+    /*}*/
+    /*.fontsize-15 {*/
+        /*font-size: 2.2rem;*/
+    /*}*/
+/*}*/
+
+
+/*灯笼*/
+#top-lantern>img{
+    width: 80%;
+    z-index: 99999;
+}
+#top-lantern{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 15%;
+}
+div#top-qrcode {
+    position: absolute;
+    width: 10%;
+    height: 18%;
+    top: 1%;
+}
+/*二维码*/
+.qrcode>canvas{
+    position: absolute;
+    left: 4%;
+    width: 100%;
+}
+img#logoimg{
+    position: absolute;
+    width: 103%;
+    z-index: 999999999;
+}
+/*背景诗句*/
+#top-versebg>img{
+    width: 100%;
+    z-index: 99;
+}
+#top-versebg{
+    position: fixed;
+    right: 0%;
+    width: 22%;
+}
+/*梅花*/
+#top-plum>img{
+    width: 60%;
+    z-index: 999;
+}
+#top-plum{
+    position: fixed;
+    bottom:0%;
+    width: 30%;
+}
+/*等候开始页面*/
+
+.canvas{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+}
+.absCenter{
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+/*waiting页面*/
+.titleimg {
+    position: fixed;
+    width: 100%;
+    left: 5%;
+    top: 5%;
+}
+.titleimg>div>img {
+    width: 50%;
+}
+.titleimg>div:nth-child(1) {
+    width: 70%;
+    margin: auto;
+}
+.titleimg>div:nth-child(2) {
+    position: absolute;
+    bottom:2%;
+    left:50%;
+    margin: auto;
+}
+#managerJump {
+    position: fixed;
+    z-index:999;
+    width: 10%;
+    left: 4%;
+    bottom: 5%;
+}
+#configbtn {
+    position: fixed;
+    width: 10%;
+    right: 3%;
+    bottom: 5%;
+    z-index:999;
+}
+/*模式选择*/
+#modelSelete {
+    width: 60%;
+    height: 60%;
+}
+#modelSelete>img:nth-child(2) {
+    float: right;
+    width: 45%;
+}
+#modelSelete>img:nth-child(1) {
+    float: left;
+    width: 45%;
+}
+
+/*题库*/
+.qtypelist {
+    width: 80%;
+    height: 64%;
+    display: block;
+    position: absolute;
+    overflow-y: auto;
+    top:-15%;
+}
+/*题库*/
+.qtypelist>.qtype {
+    background: url(../img/tk.png);
+    background-size: 100% 100%;
+    float: left;
+    display: block;
+    width: 22%;
+    height: 34%;
+    margin: 1%;
+    position: relative;
+    overflow: hidden;
+}
+.qtypelist>.qtype>.typeTitle {
+    text-align: center;
+    bottom: 14%;
+    position: absolute;
+    width: 50%;
+    right: 3%;
+}
+
+/*用户选择*/
+.commonCenter {
+    width: 60%;
+    height: 60%;
+    position: absolute;
+}
+.commonCenter>.bgimg {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+}
+.commonCenter>.tools {
+    position: absolute;
+    bottom: 10%;
+    height: 15%;
+    margin-left:6%;
+    width: 88%;
+}
+.commonCenter>.tools2>div {
+    font-size: 35.2758px;
+    left: 2%;
+    bottom: 1%;
+    position: absolute;
+}
+.commonCenter>.tools>img {
+    height: 100%;
+    width:17%;
+}
+.floatRight{
+    float:right;
+}
+img.waitinguserbtn.absCenter {
+    position: absolute;
+    bottom: 115%;
+    width: 50%;
+}
+img.userAvatar.am-circle {
+    width: 282%;
+
+}
+img.userAvatar.tk{
+    border-radius:0;
+    width: 250%;
+    height:100%;
+}
+#waitUser .user {
+    float: left;
+    display: block;
+    height:25%;
+    width: 6%;
+    margin: 7% 7% -3% 7%;
+    position: relative;
+}
+/* × 号*/
+a.kickuser.am-circle {
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    color: red;
+    display: inline-block;
+    text-align: center;
+    transition: all .3s;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .6;
+    line-height: 24px;
+}
+.userList{
+    width: 80%;
+    height: 64%;
+    display: block;
+    position: absolute;
+    overflow-y: auto;
+    width: 90%;
+    margin-left: 6%;
+    top: -15%;
+}
+.user.am-circle{
+    background-size: 100% 100%;
+    float: left;
+    display: block;
+    width: 21%;
+    height: 46%;
+    font-size: 60px;
+    margin: 1%;
+    position: relative;
+    overflow: hidden;
+}
+img.userAvatar.am-circle{
+    width: 90%;
+    position: absolute;
+    max-width:100px;
+}
+.username{
+    font-size: 18.8904px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+/*等待*/
+
+#willbegin>.titleimg {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 5%;
+}
+#willbegin>.main {
+    position: absolute;
+    width: 100%;
+    height: 55%;
+    bottom: 6%;
+}
+#willbegin>.main>.centerbox2 {
+    margin: 0 auto;
+    width: 65%;
+    height: 100%;
+}
+#willbegin>.main>.content {
+    padding: 2%;
+}
+#iconwillbegin {
+    width: 70%;
+    float: left;
+}
+#willbegin>.main>.centerbox {
+    margin: 2% 23% 0 auto;
+    width: 53%;
+    height: 100%;
+}
+img#dengpinting{
+    position: absolute;
+    height: 100%;
+    width: 60%;
+}
+#cdwillbegin {
+    float: right;
+    width: 10%;
+    margin-right: 10%;
+}
+.commonCenter2 {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+}
+
+
+
+
+/*游戏中*/
+.singleLine>div{
+    background-size: 100% 100%;
+    float: left;
+    display: block;
+    width: 100%;
+    margin: 10px 0 0 0;
+    position: relative;
+    overflow: hidden;
+}
+.Qanswers>div{
+    background-size: 100% 100%;
+    float: left;
+    display: block;
+    width: 50%;
+    margin: 10px 0 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.optionItem{
+    font-weight: 600;
+}
+img#Radio {
+    position: absolute;
+    width: 13%;
+    right: 6%;
+    top: 8%;
+}
+img#Radio2 {
+    position: absolute;
+    width: 13%;
+    right: 6%;
+    top: 8%;
+}
+img#answerbtn {
+    position: absolute;
+    width: 6%;
+    left: 6%;
+    top: 18%;
+}
+img#answerbtn2 {
+    position: absolute;
+    width: 6%;
+    left: 6%;
+    top: 18%;
+}
+.question {
+    position: absolute;
+    margin-top: 6%;
+    width: 68%;
+    left: 1%;
+    right: 7%;
+    height: 81%;
+}
+div#Qimgs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#idiom_img{
+    width: 70%;
+    margin-left: 11%;
+    margin-top: -10%;
+}
+.pausebtn{
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height:70%
+}
+img.overcenter {
+    width: 10%;
+    bottom: 3%;
+    right: 3%;
+    position: fixed;
+}
+.main2{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+}
+img#Ranking {
+    position: absolute;
+    width: 30%;
+    left: 34%;
+    top: 8%;
+    right: 0;
+}
+img#gameoverbtn{
+    position: absolute;
+    bottom: 9%;
+    height: 11%;
+    right: 7%;
+}
+.Qanswers {
+margin: 1% 0 0 7%;
+}
+.commonCenter>.tools2{
+    position: absolute;
+    bottom: 10%;
+    height: 15%;
+    margin-left: 6%;
+    width: 88%;
+}
+.commonCenter>.tools2>.floatRight{
+    position: absolute;
+    right: 0;
+    width:13%;
+    bottom: 1%;
+}
+div.Qtitle {
+    margin: 13% 0 4px 8%;
+}
+.bialtitle{
+    position: absolute;
+    top: 22%;
+}
+.qtypelist2.absCenter{
+    width: 80%;
+    height: 48%;
+    display: block;
+    position: absolute;
+    overflow-y: auto;
+}
+
+/*排行榜*/
+img.userhostdowm {
+    width: 7%;
+    float: left;
+    margin-right: 3%;
+}
+
+/*闪烁效果*/
+@keyframes blink{
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-webkit-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+
+@-moz-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-ms-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-o-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+.blink{
+    animation: blink .75s linear infinite;
+    /* 其它浏览器兼容性前缀 */
+    -webkit-animation: blink .75s linear infinite;
+    -moz-animation: blink .75s linear infinite;
+    -ms-animation: blink .75s linear infinite;
+    -o-animation: blink .75s linear infinite;
+
+    filter: hue-rotate(60deg);
+    color: green;
+    /*filter: hue-rotate(290deg)*/
+}

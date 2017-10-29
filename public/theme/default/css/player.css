@@ -1,0 +1,418 @@
+body{
+    background-color:#000044;
+    background:url(../img/playerbg.png) no-repeat center center fixed;
+    margin:0px;
+    overflow:hidden;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    -webkit-user-select:none;
+    user-select:none;
+}
+.content{
+    position:relative;
+    max-width: 600px;
+    width:100%;
+    height:100%;
+    margin:0 auto;
+}
+#top-plum{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+/*上业*/
+.playerInfo {
+    position: relative;
+    width: 75%;
+}
+
+.userAvatar{
+
+    width: 23%;
+    float: left;
+    padding: 0px 10px;
+}
+.userAvatar>img{
+    width: 30%;
+
+}
+
+.userinfo {
+    white-space: nowrap;
+    line-height: 100%;
+    width: 40%;
+    margin-left: 28%;
+}
+.userinfo>div {
+    margin-top: 12%;
+}
+
+img.shutdown {
+    width: 15%;
+    max-width:90px;
+    position:absolute;
+    bottom:60px;
+    right:10%;
+    /*float:right;*/
+    /*margin-right:10%;*/
+    /*margin-top:0;*/
+}
+
+
+
+/*背景诗句*/
+#top-versebg>img{
+    width: 100%;
+}
+#top-versebg {
+    position: fixed;
+    top: 0%;
+    right: 0%;
+    width: 50%;
+}
+/*灯笼*/
+#top-lantern>img{
+    width: 80%;
+    z-index: 99999;
+}
+#top-lantern{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 25%;
+}
+
+/*waiting页面*/
+.titleimg {
+    position: fixed;
+    width: 100%;
+    left: 5%;
+    top: 5%;
+}
+.titleimg>div>img {
+    width: 50%;
+}
+.titleimg>div:nth-child(1) {
+    width: 70%;
+    margin: auto;
+}
+.titleimg>div:nth-child(2) {
+    position: absolute;
+    bottom:2%;
+    left:50%;
+    margin: auto;
+}
+#managerJump {
+    position: fixed;
+    width: 10%;
+    left: 4%;
+    bottom: 5%;
+}
+#configbtn {
+    position: fixed;
+    width: 10%;
+    right: 3%;
+    bottom: 5%;
+}
+
+.absCenter {
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+/*dsfsdfs*/
+.singleImage>div {
+    width: 60%;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-top: 40%;
+}
+.singleImage>div>img {
+    display: block;
+    width: 60%;
+    margin-left: 17%;
+}
+.singleImage>span {
+    text-align: center;
+    font: 45px "luobo";
+    color: magenta;
+    display: block;
+    margin-top: 5%;
+    line-height: 60px;
+}
+
+
+/*抢*/
+img.qiangbtn {
+    position: absolute;
+    top: 19%;
+    left: 24%;
+    width: 50%;
+    z-index: 999;
+}
+.Qanswerimg3 {
+    position: absolute;
+    left: 2.2%;
+    width: 95%;
+}
+div#qiang {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.Qiqng {
+    position: absolute;
+    width: 100%;
+    height: 35%;
+    top: 48%;
+}
+div#Qiang2 {
+    background-size: 100% 100%;
+    float: left;
+    display: block;
+    width: 47%;
+    height: 58%;
+    margin: 2% 1% 1% 1%;
+    position: relative;
+    overflow: hidden;
+}
+/*暂停*/
+img.pausebtn {
+    width: 50%;
+    margin: 22% 25%;
+}
+
+/*结束*/
+.gameover {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 40%;
+}
+.gameover2 {
+    POSITION: absolute;
+    top: 31%;
+    width: 100%;
+    text-align: center;
+}
+/*等待开始*/
+.willbegint {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 30%;
+}
+.willbegint2 {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+
+img.Qanswerimg23 {
+    position: absolute;
+    left: 2.2%;
+    width: 48%;
+    height: 108%;
+    z-index: 999;
+}
+
+.bgimgzd {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999999999;
+}
+
+/*闪烁效果*/
+@keyframes blink{
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-webkit-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+
+@-moz-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-ms-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+@-o-keyframes blink {
+    0% { opacity: 0.3; }
+    25% { opacity: 0.7; }
+    50% { opacity: 0.9; }
+    75% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+.blink{
+    animation: blink .75s linear infinite;
+    /* 其它浏览器兼容性前缀 */
+    -webkit-animation: blink .75s linear infinite;
+    -moz-animation: blink .75s linear infinite;
+    -ms-animation: blink .75s linear infinite;
+    -o-animation: blink .75s linear infinite;
+
+   filter: hue-rotate(60deg);
+
+
+/*filter: hue-rotate(290deg)*/
+
+
+}
+
+
+
+
+
+
+
+/*闪烁效果*/
+
+
+@media (min-width: 1440px) {
+    #top-lantern{
+        width:15%;
+    }
+    #top-versebg{
+        width:30%;
+    }
+}
+
+
+
+
+/*ｇａｍｉｎｇ*/
+
+.gaming {
+    width: 100%;
+    height: 100%;
+}
+
+
+.questBox  {
+    position: relative;
+    width: 80%;
+    height: 30%;
+    margin: 0px 10%;
+    text-align: center;
+}
+
+
+
+.questImg{
+
+    position: absolute;
+    top: 30px;
+    width: 90%;
+
+    padding: 0px 30px;
+
+}
+
+
+.questBg{
+    width: 100%;
+}
+
+
+.QanswerText{
+    position: absolute;
+    top: 30px;
+    width: 90%;
+    text-align: left;
+    padding: 0px 30px;
+}
+.Qtitle{
+    width: 89%;
+    height: 29%;
+    left: 5%;
+    position: absolute;
+}
+.Qanswertitle {
+    position: absolute;
+    width: 77%;
+    height: 21%;
+    left: 11%;
+    text-align: center;
+    top: 2.5%;
+}
+
+.questOption {
+    position: absolute;
+    width: 90%;
+    margin: 15px 5% 0px 5%;
+}
+.optionBox{
+    position: relative;
+    width: 40%;
+    float: left;
+    margin: 0px 5%;
+}
+
+.optionBg{
+    width: 100%;
+}
+.optionOk{
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.optSelected{
+    width: 30%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+
+.optionText{
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    margin: 30px 0px;
+    text-align: center;
+}
+
+
+.Qanswerimg {
+    position: absolute;
+    left: 2.2%;
+    width: 95%;
+    height: 100%;
+    top: 0%;
+}
+.Qanswerfont {
+    position: absolute;
+    left: 11.2%;
+    width: 75%;
+    text-align: center;
+    top: 35%;
+    overflow: hidden;
+    text-align: center;
+}
+.vieBox {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 20%;
+}

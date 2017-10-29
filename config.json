@@ -1,0 +1,45 @@
+{
+    "host": {
+        "server": {
+            "value": "",
+            "_comment": "单网卡机器系统会自动读取本机局域网IP地址，多网卡及多层网络结构，请在value中填写服务器IP地址。eg:'192.168.1.1'"
+        },
+        "port": {
+            "value": "3000",
+            "_comment": "服务器初始监听端口号，端口不可用时系统自动寻找可用端口。"
+        },
+        "admin": {
+            "value": true,
+            "_comment": "本机作为控制端"
+        },
+        "wifi": {
+            "value": "知识竞答WIFI",
+            "_comment": "提示用户连接无线网的名称"
+        }
+    },
+    "game": {
+        "theme": {
+            "value": "default",
+            "_comment": "游戏界面主题。"
+        }
+    },
+    "gametimer": {
+         "_comment": "游戏计时器",
+        "comming": {
+            "value": 6,
+            "_comment": "游戏即将开始倒计时时长。单位：秒"
+        },
+        "vying": {
+            "value": 5,
+            "_comment": "抢答模式，开抢倒计时时长。单位：秒"
+        },
+        "answering": {
+            "value": 7,
+            "_comment": "答题时长。单位秒"
+        },
+        "showing": {
+            "value": 5,
+            "_comment": "答案显示时长，答案显示完后进入下一题。单位：秒"
+        }
+    }
+}
